@@ -13,7 +13,7 @@ public:
   ~Communicator();
 
 private:
-  int socket;
+  int socketFd;
   sockaddr_in address;
   Mode mode;
   void bindOrConnectBasedOn(Mode mode);

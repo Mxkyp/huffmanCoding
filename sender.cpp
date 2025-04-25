@@ -1,6 +1,6 @@
 #include "communicator.hpp"
 
-int main(int argc, char *argv[]) {
+int main(void) {
   Communicator comm(8080, Communicator::Mode::SENDER);
   comm.sendFileToServer();
   return 0;
