@@ -5,17 +5,17 @@ LDFLAGS = -fsanitize=address
 
 all: sender receiver
 sender: sender.cpp communicator.cpp communicator.hpp
-	$(CXX) $(CXXFLAGS) -o sender sender.cpp communicator.cpp
+	$(CXX) $(CXXFLAGS) -o sender.exe sender.cpp communicator.cpp
 
 receiver: receiver.cpp communicator.cpp communicator.hpp
-	$(CXX) $(CXXFLAGS) -o receiver receiver.cpp communicator.cpp
+	$(CXX) $(CXXFLAGS) -o receiver.exe receiver.cpp communicator.cpp
 
 dev: senderDev receiverDev
 senderDev: sender.cpp communicator.cpp communicator.hpp
-	$(CXX) $(CXXDEVFLAGS) -o sender sender.cpp communicator.cpp $(LDFLAGS)
+	$(CXX) $(CXXDEVFLAGS) -o sender.exe sender.cpp communicator.cpp $(LDFLAGS)
 
 receiverDev: receiver.cpp communicator.cpp communicator.hpp
-	$(CXX) $(CXXDEVFLAGS) -o receiver receiver.cpp communicator.cpp $(LDFLAGS) 
+	$(CXX) $(CXXDEVFLAGS) -o receiver.exe receiver.cpp communicator.cpp $(LDFLAGS) 
 
 clean:
-	rm -f sender receiver
+	rm -f sender.exe receiver.exe
