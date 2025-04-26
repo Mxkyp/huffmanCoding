@@ -1,7 +1,11 @@
 #include "communicator.hpp"
+#include <stdexcept>
 
 int main(int argc, char *argv[]) {
-  Communicator comm(8080, Communicator::Mode::SENDER, "192.168.100.202");
+  if (argc != 2) {
+    throw std::runtime_error("Please provide a valid IP");
+  }
+  Communicator comm(8080, Communicator::Mode::SENDER, argv[1]);
   comm.sendFileToServer();
   return 0;
 }
