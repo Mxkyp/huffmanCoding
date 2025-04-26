@@ -17,5 +17,10 @@ senderDev: sender.cpp communicator.cpp communicator.hpp
 receiverDev: receiver.cpp communicator.cpp communicator.hpp
 	$(CXX) $(CXXDEVFLAGS) -o receiver.exe receiver.cpp communicator.cpp $(LDFLAGS) 
 
+testH: testRun
+
+testRun: test.cpp huffman.cpp huffman.hpp
+	$(CXX) $(CXXDEVFLAGS) -o test.exe test.cpp huffman.cpp $(LDFLAGS)
+
 clean:
-	rm -f sender.exe receiver.exe
+	rm -f *.exe
