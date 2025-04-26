@@ -23,20 +23,24 @@ Communicator::Communicator(const int port, Mode mode, const char *ipAdress) {
   if (socketFd < 0) {
     throw std::runtime_error("Socket creation failed");
   }
+
   address.sin_family = AF_INET;
   address.sin_port =
       htons(port); // convert from machine byte order to network byte order
   address.sin_addr.s_addr = INADDR_ANY; // bind to any address
+
   inet_pton(AF_INET, ipAdress, &address.sin_addr);
   bindOrConnectBasedOn(mode);
 }
 
+// Close the socket
 Communicator::~Communicator() { close(socketFd); }
 
 bool Communicator::ReceiveFileFromAnyConnection() {
   if (mode == SENDER) {
     throw std::runtime_error("Mode not RECEIVER");
   }
+
   listen(socketFd, 5);
   int clientsocketFd = accept(socketFd, nullptr, nullptr);
 
