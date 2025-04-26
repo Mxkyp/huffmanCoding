@@ -8,6 +8,7 @@ class Communicator {
 public:
   enum Mode { SENDER, RECEIVER };
   Communicator(const int port, Mode mode);
+  Communicator(const int port, Mode mode, const char *ipAdress);
   bool ReceiveFileFromAnyConnection();
   bool sendFileToServer();
   ~Communicator();

@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <sys/socket.h>
 
+// a constructor for serial connections
 Communicator::Communicator(const int port, Mode mode) {
   socketFd = socket(AF_INET, SOCK_STREAM, 0);
   if (socketFd < 0) {
@@ -13,6 +14,20 @@ Communicator::Communicator(const int port, Mode mode) {
   address.sin_port =
       htons(port); // convert from machine byte order to network byte order
   address.sin_addr.s_addr = INADDR_ANY; // bind to any address
+  bindOrConnectBasedOn(mode);
+}
+
+// a constructor for local network connections
+Communicator::Communicator(const int port, Mode mode, const char *ipAdress) {
+  socketFd = socket(AF_INET, SOCK_STREAM, 0);
+  if (socketFd < 0) {
+    throw std::runtime_error("Socket creation failed");
+  }
+  address.sin_family = AF_INET;
+  address.sin_port =
+      htons(port); // convert from machine byte order to network byte order
+  address.sin_addr.s_addr = INADDR_ANY; // bind to any address
+  inet_pton(AF_INET, ipAdress, &address.sin_addr);
   bindOrConnectBasedOn(mode);
 }
 
