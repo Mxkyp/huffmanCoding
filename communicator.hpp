@@ -17,6 +17,7 @@ public:
 
 private:
   int socketFd;
+  int clientSocketFd;
   sockaddr_in address;
   Mode mode;
   void bindOrConnectBasedOn(Mode mode);

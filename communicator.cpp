@@ -1,5 +1,6 @@
 #include "communicator.hpp"
 #include <cstring>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <sys/socket.h>
@@ -42,12 +43,31 @@ bool Communicator::receiveFileFromAnyConnection(std::string fileName) {
   }
 
   listen(socketFd, 5);
-  int clientsocketFd = accept(socketFd, nullptr, nullptr);
 
-  // recieving data
-  char buffer[1024] = {0};
-  recv(clientsocketFd, buffer, sizeof(buffer), 0);
-  std::cout << "Message from client: " << buffer << std::endl;
+  // Open the file to save received data
+  std::ofstream outFile(fileName, std::ios::binary);
+  if (!outFile.is_open()) {
+    throw std::runtime_error("Failed to open output file");
+  }
+
+  char buffer[1024] = {0}; // Buffer for receiving data
+  ssize_t bytesRead;
+
+  while ((bytesRead = recv(clientSocketFd, buffer, sizeof(buffer), 0)) > 0) {
+    outFile.write(buffer, bytesRead); // Write received data to file
+    if (bytesRead < sizeof(buffer)) {
+      break; // Break if the message is fully received
+    }
+  }
+
+  if (bytesRead < 0) {
+    std::cerr << "Error in receiving file data" << std::endl;
+  }
+
+  // Close the file and socket
+  outFile.close();
+
+  std::cout << "File received successfully: " << fileName << std::endl;
 
   return true;
 }
@@ -58,7 +78,7 @@ std::string Communicator::receiveStringFromAnyConnection() {
   }
 
   listen(socketFd, 5);
-  int clientSocketFd = accept(socketFd, nullptr, nullptr);
+  clientSocketFd = accept(socketFd, nullptr, nullptr);
 
   char buffer[10 * 1024] = {0}; // Buffer to store received data
   std::string receivedString;
@@ -91,10 +111,31 @@ bool Communicator::sendFileToServer(std::string fileName) {
     std::cout << "IGET HERE!" << std::endl;
     throw std::runtime_error("Mode not SENDER");
   }
-  const char *message = "Hello, server!";
-  int result = send(socketFd, message, strlen(message), 0);
-}
+  std::ifstream file(fileName, std::ios::binary);
+  if (!file.is_open()) {
+    throw std::runtime_error("Failed to open file");
+  }
 
+  const size_t bufferSize = 4096; // 4 KB chunks
+  char buffer[bufferSize];
+
+  while (file.good()) {
+    file.read(buffer, bufferSize);
+    std::streamsize bytesRead =
+        file.gcount(); // how many bytes were actually read
+
+    if (bytesRead > 0) {
+      int bytesSent = send(socketFd, buffer, bytesRead, 0);
+      if (bytesSent < 0) {
+        file.close();
+        throw std::runtime_error("Failed to send file data");
+      }
+    }
+  }
+
+  file.close();
+  return true;
+}
 void Communicator::bindOrConnectBasedOn(Mode mode) {
   this->mode = mode;
 

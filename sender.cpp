@@ -14,10 +14,12 @@ int main(int argc, char *argv[]) {
   // fake sender
   std::map<char, std::string> charCodes = Huffman::getHuffmanDict(tree);
   std::string dictString = Huffman::dictToString(charCodes);
+  Huffman::encodeFile("test.txt", "encoded", charCodes);
 
   Communicator comm(8080, Communicator::Mode::SENDER, argv[1]);
   std::cout << dictString << std::flush;
   comm.sendStringToServer(dictString);
-  //  comm.sendFileToServer("encoded");
+  sleep(5);
+  comm.sendFileToServer("encoded");
   return 0;
 }
