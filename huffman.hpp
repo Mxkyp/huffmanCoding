@@ -46,13 +46,11 @@ public:
 
 /***
  * ALGORITHM METHODS
- *
  */
 std::map<char, int> countOccurences(const char *fileName);
 std::shared_ptr<Node> createHuffmanTree(std::map<char, int> occurences);
 void printTree(const std::shared_ptr<Node> node, int level = 0);
-void getCharCodes(const std::shared_ptr<Node> &node, std::vector<char> buf,
-                  std::map<std::string, char> &map);
+std::map<char, std::string> getHuffmanDict(std::shared_ptr<Node> tree);
 }; // namespace Huffman
 
 #endif

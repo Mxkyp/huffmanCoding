@@ -17,14 +17,11 @@ int main(int argc, char *argv[]) {
 
   Huffman::printTree(tree);
 
-  std::map<std::string, char> charCodes;
-  std::vector<char> vec;
-
-  Huffman::getCharCodes(tree, vec, charCodes);
+  std::map<char, std::string> charCodes = Huffman::getHuffmanDict(tree);
 
   // Print the Huffman codes
-  for (std::pair<std::string, char> p : charCodes) {
-    std::cout << p.first << " lol: " << (int)p.second << " " << p.second
+  for (std::pair<char, std::string> p : charCodes) {
+    std::cout << p.first << " lol: " << (int)p.first << " " << p.second
               << std::endl;
   }
 }

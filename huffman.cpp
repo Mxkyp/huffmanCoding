@@ -19,6 +19,46 @@ std::shared_ptr<Node> Node::getRight() { return right; }
 /**
  * ALGORITHM METHODS
  */
+
+/**
+ * NOT EXPORTED modify the map param so it stores the huffman dictionary,
+ * based on the root node
+ */
+void getCharCodes(const std::shared_ptr<Node> &node, std::vector<char> buf,
+                  std::map<char, std::string> &map) {
+  if (!node) {
+    return;
+  }
+
+  // If it's a leaf node, insert the code into the map
+  if (!node->getLeft() && !node->getRight()) {
+    std::string code(buf.begin(), buf.end());
+    map.insert({node->getCh(), code});
+    return;
+  }
+
+  // Traverse right (append 1 for right child)
+  buf.push_back('1');
+  getCharCodes(node->getRight(), buf, map);
+  buf.pop_back();
+
+  // Traverse left (append 0 for left child)
+  buf.push_back('0');
+  getCharCodes(node->getLeft(), buf, map);
+  buf.pop_back();
+}
+
+/**
+ * get the huffman dictionary
+ */
+std::map<char, std::string> getHuffmanDict(std::shared_ptr<Node> tree) {
+  std::map<char, std::string> dict;
+  std::vector<char> vec;
+  getCharCodes(tree, vec, dict);
+
+  return dict;
+}
+
 std::map<char, int> countOccurences(const char *fileName) {
 
   std::map<char, int> occurences;
@@ -78,33 +118,4 @@ void printTree(const std::shared_ptr<Node> node, int level) {
   // Print the left subtree
   printTree(node->getLeft(), level + 1);
 }
-
-/**
- * modify the map param so it stores the huffman dictionary,
- * based on the root node
- */
-void getCharCodes(const std::shared_ptr<Node> &node, std::vector<char> buf,
-                  std::map<std::string, char> &map) {
-  if (!node) {
-    return;
-  }
-
-  // If it's a leaf node, insert the code into the map
-  if (!node->getLeft() && !node->getRight()) {
-    std::string code(buf.begin(), buf.end());
-    map.insert({code, node->getCh()});
-    return;
-  }
-
-  // Traverse right (append 1 for right child)
-  buf.push_back('1');
-  getCharCodes(node->getRight(), buf, map);
-  buf.pop_back();
-
-  // Traverse left (append 0 for left child)
-  buf.push_back('0');
-  getCharCodes(node->getLeft(), buf, map);
-  buf.pop_back();
-}
-
 } // namespace Huffman
