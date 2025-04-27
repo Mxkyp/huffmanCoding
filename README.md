@@ -8,4 +8,4 @@ najpierw odpalasz program który ma odebrać wiadomość:
 przy użyciu: **make r**
 
 potem odpalasz program który wysyła wiadomość:
-przy użyciu: **make s ip="((ip odbiorcy))"**
+przy użyciu: **make s ip=ipOdbiorcy**
