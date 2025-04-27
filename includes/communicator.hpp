@@ -13,7 +13,7 @@ public:
   bool receiveFileFromAnyConnection(std::string fileName);
   std::string receiveStringFromAnyConnection();
   bool sendFileToServer(std::string fileName);
-  bool sendStringToServer(std::string str);
+  void sendStringToServer(std::string str);
   ~Communicator();
 
 private:

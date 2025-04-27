@@ -1,4 +1,4 @@
-#include "communicator.hpp"
+#include "../includes/communicator.hpp"
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -98,12 +98,12 @@ std::string Communicator::receiveStringFromAnyConnection() {
   return receivedString;
 }
 
-bool Communicator::sendStringToServer(std::string str) {
+void Communicator::sendStringToServer(std::string str) {
   if (this->mode == RECEIVER) {
     std::cout << "IGET HERE!" << std::endl;
     throw std::runtime_error("Mode not SENDER");
   }
-  long result = send(socketFd, str.c_str(), str.length(), 0);
+  send(socketFd, str.c_str(), str.length(), 0);
 }
 
 bool Communicator::sendFileToServer(std::string fileName) {

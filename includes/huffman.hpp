@@ -2,7 +2,6 @@
 #define HUFFMAN_HPP
 #include <map>
 #include <memory>
-#include <vector>
 /**
  * namespace representing the huffman encoding algorithm
  */
