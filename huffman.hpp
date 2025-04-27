@@ -55,6 +55,7 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<char, std::string> dict);
 void decodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<std::string, char> dict);
+char extractBitValueFrom(char ch, int i);
 }; // namespace Huffman
 
 #endif

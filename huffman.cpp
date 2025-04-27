@@ -151,7 +151,6 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
       currentByte.clear();
     }
   }
-
   trullycodedFd.close();
   uncodedFd.close();
   tempFd.close();
@@ -168,8 +167,8 @@ void decodeFile(const char *inputFileName, const char *outputFileName,
   std::string recoveredBits;
   codedFd.get(ch);
 
-  for (int i = 7 - paddingBits; i >= 0; --i) { // Step 3: Expand to bits
-    recoveredBits += ((ch >> i) & 1) ? '1' : '0';
+  for (int i = 7 - paddingBits; i >= 0; --i) {
+    recoveredBits += extractBitValueFrom(ch, i);
     if (dict.find(recoveredBits) != dict.end()) {
       uncodedFd << dict[recoveredBits];
       recoveredBits.clear();
@@ -177,8 +176,8 @@ void decodeFile(const char *inputFileName, const char *outputFileName,
   }
 
   while (codedFd.get(ch)) {
-    for (int i = 7; i >= 0; --i) { // Step 3: Expand to bits
-      recoveredBits += ((ch >> i) & 1) ? '1' : '0';
+    for (int i = 7; i >= 0; --i) {
+      recoveredBits += extractBitValueFrom(ch, i);
       if (dict.find(recoveredBits) != dict.end()) {
         uncodedFd << dict[recoveredBits];
         recoveredBits.clear();
@@ -189,5 +188,7 @@ void decodeFile(const char *inputFileName, const char *outputFileName,
   uncodedFd.close();
   codedFd.close();
 }
+
+char extractBitValueFrom(char ch, int i) { return ((ch >> i) & 1) ? '1' : '0'; }
 
 } // namespace Huffman
