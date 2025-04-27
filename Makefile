@@ -5,7 +5,7 @@ LDFLAGS = -fsanitize=address
 
 SRC=./src/
 HEADER=./includes/
-IP:= $(host)
+IP:= $(ip)
 
 s: sender.cpp $(SRC)communicator.cpp $(HEADER)communicator.hpp $(SRC)huffman.cpp $(HEADER)huffman.hpp
 	$(CXX) $(CXXFLAGS) -o sender.exe sender.cpp $(SRC)communicator.cpp $(SRC)huffman.cpp && ./sender.exe $(IP)
