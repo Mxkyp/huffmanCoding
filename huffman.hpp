@@ -56,6 +56,16 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
 void decodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<std::string, char> dict);
 char extractBitValueFrom(char ch, int i);
+/**
+ * turn the dict to string for sending over a network
+ */
+std::string dictToString(std::map<char, std::string> dict);
+
+/**
+ * receive the dictonary from the network and turn it back to a map
+ */
+std::map<std::string, char> stringToDict(std::string str);
+
 }; // namespace Huffman
 
 #endif
