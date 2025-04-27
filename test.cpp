@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
   }
 
   std::map<char, int> charOccurences = Huffman::countOccurences(argv[1]);
-  const std::shared_ptr<HuffmanNode> tree =
+  const std::shared_ptr<Huffman::Node> tree =
       Huffman::createHuffmanTree(charOccurences);
 
   Huffman::printTree(tree);

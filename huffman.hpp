@@ -3,6 +3,10 @@
 #include <map>
 #include <memory>
 #include <vector>
+/**
+ * namespace representing the huffman encoding algorithm
+ */
+namespace Huffman {
 
 /**
  * class representing the HuffmanNode,
@@ -10,34 +14,23 @@
  * the number of its occurences(the sum of occurences of children for vertexes)
  * and pointers to the left and right children
  */
-class HuffmanNode {
+class Node {
 public:
-  HuffmanNode(char character, int frequency)
+  Node(char character, int frequency)
       : ch(character), freq(frequency), left(nullptr), right(nullptr) {};
-  void setLeft(std::shared_ptr<HuffmanNode> ptr);
-  void setRight(std::shared_ptr<HuffmanNode> ptr);
+  void setLeft(std::shared_ptr<Node> ptr);
+  void setRight(std::shared_ptr<Node> ptr);
   int getFrequency() const;
   int getCh() const;
-  std::shared_ptr<HuffmanNode> getLeft();
-  std::shared_ptr<HuffmanNode> getRight();
+  std::shared_ptr<Node> getLeft();
+  std::shared_ptr<Node> getRight();
 
 private:
   char ch;  // character, or '\0' if it's an internal node
   int freq; // frequency
-  std::shared_ptr<HuffmanNode> left;
-  std::shared_ptr<HuffmanNode> right;
+  std::shared_ptr<Node> left;
+  std::shared_ptr<Node> right;
 };
-
-/**
- * namespace representing the huffman encoding algorithm
- */
-namespace Huffman {
-std::map<char, int> countOccurences(const char *fileName);
-std::shared_ptr<HuffmanNode> createHuffmanTree(std::map<char, int> occurences);
-void printTree(const std::shared_ptr<HuffmanNode> node, int level = 0);
-void getCharCodes(const std::shared_ptr<HuffmanNode> &node,
-                  std::vector<char> buf, std::map<std::string, char> &map);
-}; // namespace Huffman
 
 /**
  * HuffmanComparator to compare the frequency of nodes,
@@ -45,9 +38,21 @@ void getCharCodes(const std::shared_ptr<HuffmanNode> &node,
  */
 class HuffmanComparator {
 public:
-  bool operator()(const std::shared_ptr<HuffmanNode> &a,
-                  const std::shared_ptr<HuffmanNode> &b) {
+  bool operator()(const std::shared_ptr<Node> &a,
+                  const std::shared_ptr<Node> &b) {
     return a->getFrequency() > b->getFrequency();
   }
 };
+
+/***
+ * ALGORITHM METHODS
+ *
+ */
+std::map<char, int> countOccurences(const char *fileName);
+std::shared_ptr<Node> createHuffmanTree(std::map<char, int> occurences);
+void printTree(const std::shared_ptr<Node> node, int level = 0);
+void getCharCodes(const std::shared_ptr<Node> &node, std::vector<char> buf,
+                  std::map<std::string, char> &map);
+}; // namespace Huffman
+
 #endif

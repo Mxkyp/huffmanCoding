@@ -6,6 +6,19 @@
 #include <vector>
 
 namespace Huffman {
+/**
+ * NODE
+ */
+int Node::getFrequency() const { return freq; }
+int Node::getCh() const { return ch; }
+void Node::setLeft(std::shared_ptr<Node> ptr) { left = ptr; }
+void Node::setRight(std::shared_ptr<Node> ptr) { right = ptr; }
+std::shared_ptr<Node> Node::getLeft() { return left; }
+std::shared_ptr<Node> Node::getRight() { return right; }
+
+/**
+ * ALGORITHM METHODS
+ */
 std::map<char, int> countOccurences(const char *fileName) {
 
   std::map<char, int> occurences;
@@ -21,13 +34,13 @@ std::map<char, int> countOccurences(const char *fileName) {
   return occurences;
 }
 
-std::shared_ptr<HuffmanNode> createHuffmanTree(std::map<char, int> occurences) {
-  std::vector<std::shared_ptr<HuffmanNode>> trees;
+std::shared_ptr<Node> createHuffmanTree(std::map<char, int> occurences) {
+  std::vector<std::shared_ptr<Node>> trees;
   trees.reserve(occurences.size());
 
   // create Pairs of chars and occurences
   for (auto &p : occurences) {
-    trees.push_back(std::make_shared<HuffmanNode>(p.first, p.second));
+    trees.push_back(std::make_shared<Node>(p.first, p.second));
   }
 
   // combine the pairs with least occurences until only one tree remains
@@ -40,8 +53,8 @@ std::shared_ptr<HuffmanNode> createHuffmanTree(std::map<char, int> occurences) {
     auto secondLast = trees.back();
     trees.pop_back();
 
-    auto parent = std::make_shared<HuffmanNode>(
-        '\0', last->getFrequency() + secondLast->getFrequency());
+    auto parent = std::make_shared<Node>('\0', last->getFrequency() +
+                                                   secondLast->getFrequency());
     parent->setLeft(secondLast);
     parent->setRight(last);
     trees.push_back(parent);
@@ -50,7 +63,7 @@ std::shared_ptr<HuffmanNode> createHuffmanTree(std::map<char, int> occurences) {
   return trees.front();
 }
 
-void printTree(const std::shared_ptr<HuffmanNode> node, int level) {
+void printTree(const std::shared_ptr<Node> node, int level) {
   if (!node)
     return;
 
@@ -70,8 +83,8 @@ void printTree(const std::shared_ptr<HuffmanNode> node, int level) {
  * modify the map param so it stores the huffman dictionary,
  * based on the root node
  */
-void getCharCodes(const std::shared_ptr<HuffmanNode> &node,
-                  std::vector<char> buf, std::map<std::string, char> &map) {
+void getCharCodes(const std::shared_ptr<Node> &node, std::vector<char> buf,
+                  std::map<std::string, char> &map) {
   if (!node) {
     return;
   }
@@ -93,14 +106,5 @@ void getCharCodes(const std::shared_ptr<HuffmanNode> &node,
   getCharCodes(node->getLeft(), buf, map);
   buf.pop_back();
 }
-} // namespace Huffman
 
-/**
- * HUFFMAN NODE
- */
-int HuffmanNode::getFrequency() const { return freq; }
-int HuffmanNode::getCh() const { return ch; }
-void HuffmanNode::setLeft(std::shared_ptr<HuffmanNode> ptr) { left = ptr; }
-void HuffmanNode::setRight(std::shared_ptr<HuffmanNode> ptr) { right = ptr; }
-std::shared_ptr<HuffmanNode> HuffmanNode::getLeft() { return left; }
-std::shared_ptr<HuffmanNode> HuffmanNode::getRight() { return right; }
+} // namespace Huffman
