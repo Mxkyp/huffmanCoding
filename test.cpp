@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 
   // fake sender
   std::map<char, std::string> charCodes = Huffman::getHuffmanDict(tree);
-  Huffman::encodeFile(argv[1], "encoded.txt", charCodes);
+  Huffman::encodeFile(argv[1], "encoded", charCodes);
 
   std::string dictString = dictToString(charCodes);
 

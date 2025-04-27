@@ -123,24 +123,24 @@ void printTree(const std::shared_ptr<Node> node, int level) {
 void encodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<char, std::string> dict) {
   std::ifstream uncodedFd(inputFileName, std::ios::in);
-  std::fstream codedFd(outputFileName, std::ios::out);
-  std::ofstream trullycodedFd("encodedTRUE", std::ios::out);
+  std::fstream tempFd("temp.txt", std::ios::out);
+  std::ofstream trullycodedFd(outputFileName, std::ios::out | std::ios::binary);
   char ch;
   long long encodedBitSize = 0;
 
   while (uncodedFd.get(ch)) {
     encodedBitSize += dict[ch].length();
-    codedFd << dict[ch];
+    tempFd << dict[ch];
   }
+  tempFd.close();
 
   char paddingBitsNeeded = 8 - (encodedBitSize % 8);
   trullycodedFd.write(&paddingBitsNeeded, 1);
   std::string currentByte(paddingBitsNeeded, '0');
 
-  codedFd.close();
-  codedFd.open(outputFileName, std::ios::in);
+  tempFd.open("temp.txt", std::ios::in);
 
-  while (codedFd.get(ch)) {
+  while (tempFd.get(ch)) {
     currentByte += ch;
 
     if (currentByte.length() == 8) {
@@ -152,7 +152,7 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
 
   trullycodedFd.close();
   uncodedFd.close();
-  codedFd.close();
+  tempFd.close();
 }
 
 void decodeFile(const char *inputFileName, const char *outputFileName,
