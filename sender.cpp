@@ -1,6 +1,5 @@
 #include "./includes/communicator.hpp"
 #include "./includes/huffman.hpp"
-#include <iostream>
 #include <stdexcept>
 
 int main(int argc, char *argv[]) {
@@ -18,7 +17,6 @@ int main(int argc, char *argv[]) {
   Huffman::encodeFile("originalText.txt", "encoded", charCodes);
 
   Communicator comm(8080, Communicator::Mode::SENDER, argv[1]);
-  std::cout << dictString << std::flush;
   comm.sendStringToServer(dictString);
   sleep(1);
   comm.sendFileToServer("encoded");

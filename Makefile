@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -std=c++20 -Wextra -Wpedantic
+CXXFLAGS = -w -std=c++20 
 CXXDEVFLAGS = -Wall -std=c++20 -Wextra -Wpedantic -g -fsanitize=address
 LDFLAGS = -fsanitize=address
 

@@ -70,8 +70,6 @@ bool Communicator::receiveFileFromAnyConnection(std::string fileName) {
   // Close the file and socket
   outFile.close();
 
-  std::cout << "File received successfully: " << fileName << std::endl;
-
   return true;
 }
 
