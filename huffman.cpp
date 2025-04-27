@@ -122,9 +122,11 @@ void printTree(const std::shared_ptr<Node> node, int level) {
 
 void encodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<char, std::string> dict) {
+
   std::ifstream uncodedFd(inputFileName, std::ios::in);
   std::fstream tempFd("temp.txt", std::ios::out);
   std::ofstream trullycodedFd(outputFileName, std::ios::out | std::ios::binary);
+
   char ch;
   long long encodedBitSize = 0;
 
@@ -157,17 +159,30 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
 
 void decodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<std::string, char> dict) {
-  std::ifstream codedFd(inputFileName, std::ios::in);
+  std::ifstream codedFd(inputFileName, std::ios::in | std::ios::binary);
   std::ofstream uncodedFd(outputFileName, std::ios::out);
   char ch;
   std::string code;
 
-  while (codedFd.get(ch)) {
-    code += ch;
+  char paddingBits = codedFd.get();
+  std::string recoveredBits;
+  codedFd.get(ch);
 
-    if (dict.find(code) != dict.end()) {
-      uncodedFd << dict[code];
-      code.clear();
+  for (int i = 7 - paddingBits; i >= 0; --i) { // Step 3: Expand to bits
+    recoveredBits += ((ch >> i) & 1) ? '1' : '0';
+    if (dict.find(recoveredBits) != dict.end()) {
+      uncodedFd << dict[recoveredBits];
+      recoveredBits.clear();
+    }
+  }
+
+  while (codedFd.get(ch)) {
+    for (int i = 7; i >= 0; --i) { // Step 3: Expand to bits
+      recoveredBits += ((ch >> i) & 1) ? '1' : '0';
+      if (dict.find(recoveredBits) != dict.end()) {
+        uncodedFd << dict[recoveredBits];
+        recoveredBits.clear();
+      }
     }
   }
 
