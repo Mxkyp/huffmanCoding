@@ -1,16 +1,18 @@
 #ifndef SENDER_H
 #define SENDER_H
 #include <arpa/inet.h>
+#include <string>
 #include <unistd.h>
-
 class Communicator {
 
 public:
   enum Mode { SENDER, RECEIVER };
   Communicator(const int port, Mode mode);
   Communicator(const int port, Mode mode, const char *ipAdress);
-  bool ReceiveFileFromAnyConnection();
-  bool sendFileToServer();
+  bool receiveFileFromAnyConnection(std::string fileName);
+  std::string receiveStringFromAnyConnection();
+  bool sendFileToServer(std::string fileName);
+  bool sendStringToServer(std::string str);
   ~Communicator();
 
 private:

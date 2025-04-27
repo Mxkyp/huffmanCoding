@@ -36,7 +36,7 @@ Communicator::Communicator(const int port, Mode mode, const char *ipAdress) {
 // Close the socket
 Communicator::~Communicator() { close(socketFd); }
 
-bool Communicator::ReceiveFileFromAnyConnection() {
+bool Communicator::receiveFileFromAnyConnection(std::string fileName) {
   if (mode == SENDER) {
     throw std::runtime_error("Mode not RECEIVER");
   }
@@ -52,7 +52,41 @@ bool Communicator::ReceiveFileFromAnyConnection() {
   return true;
 }
 
-bool Communicator::sendFileToServer() {
+std::string Communicator::receiveStringFromAnyConnection() {
+  if (mode == SENDER) {
+    throw std::runtime_error("Mode not RECEIVER");
+  }
+
+  listen(socketFd, 5);
+  int clientSocketFd = accept(socketFd, nullptr, nullptr);
+
+  char buffer[10 * 1024] = {0}; // Buffer to store received data
+  std::string receivedString;
+  ssize_t bytesRead;
+
+  while ((bytesRead = recv(clientSocketFd, buffer, sizeof(buffer), 0)) > 0) {
+    receivedString.append(buffer, bytesRead);
+    if (bytesRead < sizeof(buffer)) {
+      break; // Break if the message is fully received
+    }
+  }
+
+  if (bytesRead < 0) {
+    throw std::runtime_error("Failed to receive data");
+  }
+
+  return receivedString;
+}
+
+bool Communicator::sendStringToServer(std::string str) {
+  if (this->mode == RECEIVER) {
+    std::cout << "IGET HERE!" << std::endl;
+    throw std::runtime_error("Mode not SENDER");
+  }
+  long result = send(socketFd, str.c_str(), str.length(), 0);
+}
+
+bool Communicator::sendFileToServer(std::string fileName) {
   if (this->mode == RECEIVER) {
     std::cout << "IGET HERE!" << std::endl;
     throw std::runtime_error("Mode not SENDER");
