@@ -23,4 +23,4 @@ testRun: test.cpp huffman.cpp huffman.hpp
 	$(CXX) $(CXXDEVFLAGS) -o test.exe test.cpp huffman.cpp $(LDFLAGS) && ./test.exe test.txt && rm temp.txt
 
 clean:
-	rm -f *.exe decoded.txt encoded
+	rm -f *.exe decoded.txt encoded temp.txt

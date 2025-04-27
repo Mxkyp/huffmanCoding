@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   Communicator comm(8080, Communicator::Mode::SENDER, argv[1]);
   std::cout << dictString << std::flush;
   comm.sendStringToServer(dictString);
-  sleep(5);
+  sleep(1);
   comm.sendFileToServer("encoded");
   return 0;
 }
