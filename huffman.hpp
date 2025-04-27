@@ -51,6 +51,10 @@ std::map<char, int> countOccurences(const char *fileName);
 std::shared_ptr<Node> createHuffmanTree(std::map<char, int> occurences);
 void printTree(const std::shared_ptr<Node> node, int level = 0);
 std::map<char, std::string> getHuffmanDict(std::shared_ptr<Node> tree);
+void encodeFile(const char *inputFileName, const char *outputFileName,
+                std::map<char, std::string> dict);
+void decodeFile(const char *inputFileName, const char *outputFileName,
+                std::map<std::string, char> dict);
 }; // namespace Huffman
 
 #endif

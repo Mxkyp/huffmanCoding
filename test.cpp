@@ -28,14 +28,15 @@ int main(int argc, char *argv[]) {
 
   // Huffman::printTree(tree);
 
+  // fake sender
   std::map<char, std::string> charCodes = Huffman::getHuffmanDict(tree);
-  std::string dictString = dictToString(charCodes);
-  // std::cout << dictString;
-  std::map<std::string, char> dict = stringToDict(dictString);
+  Huffman::encodeFile(argv[1], "encoded.txt", charCodes);
 
-  for (const auto &p : dict) {
-    std::cout << p.first << ":" << p.second << std::endl;
-  }
+  std::string dictString = dictToString(charCodes);
+
+  // fake receiver
+  std::map<std::string, char> dict = stringToDict(dictString);
+  Huffman::decodeFile("./encoded.txt", "decoded.txt", dict);
 }
 
 /**

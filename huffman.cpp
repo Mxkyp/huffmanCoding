@@ -118,4 +118,39 @@ void printTree(const std::shared_ptr<Node> node, int level) {
   // Print the left subtree
   printTree(node->getLeft(), level + 1);
 }
+
+void encodeFile(const char *inputFileName, const char *outputFileName,
+                std::map<char, std::string> dict) {
+  std::ifstream uncodedFd(inputFileName, std::ios::in);
+  std::ofstream codedFd(outputFileName, std::ios::out);
+  char ch;
+
+  while (uncodedFd.get(ch)) {
+    codedFd << dict[ch];
+  }
+
+  uncodedFd.close();
+  codedFd.close();
+}
+
+void decodeFile(const char *inputFileName, const char *outputFileName,
+                std::map<std::string, char> dict) {
+  std::ifstream codedFd(inputFileName, std::ios::in);
+  std::ofstream uncodedFd(outputFileName, std::ios::out);
+  char ch;
+  std::string code;
+
+  while (codedFd.get(ch)) {
+    code += ch;
+
+    if (dict.find(code) != dict.end()) {
+      uncodedFd << dict[code];
+      code.clear();
+    }
+  }
+
+  uncodedFd.close();
+  codedFd.close();
+}
+
 } // namespace Huffman
