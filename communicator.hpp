@@ -9,6 +9,7 @@ public:
   enum Mode { SENDER, RECEIVER };
   Communicator(const int port, Mode mode);
   Communicator(const int port, Mode mode, const char *ipAdress);
+  void acceptAnyConnection();
   bool receiveFileFromAnyConnection(std::string fileName);
   std::string receiveStringFromAnyConnection();
   bool sendFileToServer(std::string fileName);

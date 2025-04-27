@@ -34,6 +34,11 @@ Communicator::Communicator(const int port, Mode mode, const char *ipAdress) {
   bindOrConnectBasedOn(mode);
 }
 
+void Communicator::acceptAnyConnection() {
+  listen(socketFd, 5);
+  clientSocketFd = accept(socketFd, nullptr, nullptr);
+}
+
 // Close the socket
 Communicator::~Communicator() { close(socketFd); }
 
@@ -41,8 +46,6 @@ bool Communicator::receiveFileFromAnyConnection(std::string fileName) {
   if (mode == SENDER) {
     throw std::runtime_error("Mode not RECEIVER");
   }
-
-  listen(socketFd, 5);
 
   // Open the file to save received data
   std::ofstream outFile(fileName, std::ios::binary);
@@ -76,9 +79,6 @@ std::string Communicator::receiveStringFromAnyConnection() {
   if (mode == SENDER) {
     throw std::runtime_error("Mode not RECEIVER");
   }
-
-  listen(socketFd, 5);
-  clientSocketFd = accept(socketFd, nullptr, nullptr);
 
   char buffer[10 * 1024] = {0}; // Buffer to store received data
   std::string receivedString;
