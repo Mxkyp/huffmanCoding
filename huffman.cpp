@@ -151,6 +151,7 @@ void encodeFile(const char *inputFileName, const char *outputFileName,
       currentByte.clear();
     }
   }
+
   trullycodedFd.close();
   uncodedFd.close();
   tempFd.close();

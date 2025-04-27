@@ -20,7 +20,7 @@ receiverDev: receiver.cpp communicator.cpp communicator.hpp
 testH: testRun
 
 testRun: test.cpp huffman.cpp huffman.hpp
-	$(CXX) $(CXXDEVFLAGS) -o test.exe test.cpp huffman.cpp $(LDFLAGS)
+	$(CXX) $(CXXDEVFLAGS) -o test.exe test.cpp huffman.cpp $(LDFLAGS) && ./test.exe test.txt && rm temp.txt
 
 clean:
-	rm -f *.exe
+	rm -f *.exe decoded.txt encoded
