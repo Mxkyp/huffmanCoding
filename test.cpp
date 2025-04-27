@@ -35,8 +35,10 @@ int main(int argc, char *argv[]) {
   std::string dictString = dictToString(charCodes);
 
   // fake receiver
+  /*
   std::map<std::string, char> dict = stringToDict(dictString);
   Huffman::decodeFile("./encoded.txt", "decoded.txt", dict);
+  */
 }
 
 /**

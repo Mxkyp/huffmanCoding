@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <sys/types.h>
 #include <vector>
 
 namespace Huffman {
@@ -122,13 +123,34 @@ void printTree(const std::shared_ptr<Node> node, int level) {
 void encodeFile(const char *inputFileName, const char *outputFileName,
                 std::map<char, std::string> dict) {
   std::ifstream uncodedFd(inputFileName, std::ios::in);
-  std::ofstream codedFd(outputFileName, std::ios::out);
+  std::fstream codedFd(outputFileName, std::ios::out);
+  std::ofstream trullycodedFd("encodedTRUE", std::ios::out);
   char ch;
+  long long encodedBitSize = 0;
 
   while (uncodedFd.get(ch)) {
+    encodedBitSize += dict[ch].length();
     codedFd << dict[ch];
   }
 
+  char paddingBitsNeeded = 8 - (encodedBitSize % 8);
+  trullycodedFd.write(&paddingBitsNeeded, 1);
+  std::string currentByte(paddingBitsNeeded, '0');
+
+  codedFd.close();
+  codedFd.open(outputFileName, std::ios::in);
+
+  while (codedFd.get(ch)) {
+    currentByte += ch;
+
+    if (currentByte.length() == 8) {
+      char parsed = static_cast<char>(strtol(currentByte.c_str(), nullptr, 2));
+      trullycodedFd << parsed;
+      currentByte.clear();
+    }
+  }
+
+  trullycodedFd.close();
   uncodedFd.close();
   codedFd.close();
 }
