@@ -5,10 +5,11 @@ LDFLAGS = -fsanitize=address
 
 SRC=./src/
 HEADER=./includes/
-IP:=$(shell hostname -I | awk '{print $$1}')
+IP := $(shell hostname -I | awk '{print $$1}' | awk -F'.' '{print $$1"."$$2"."$$3}')
+LAST_OCTET := $(host)
 
 s: sender.cpp $(SRC)communicator.cpp $(HEADER)communicator.hpp $(SRC)huffman.cpp $(HEADER)huffman.hpp
-	$(CXX) $(CXXFLAGS) -o sender.exe sender.cpp $(SRC)communicator.cpp $(SRC)huffman.cpp && ./sender.exe $(IP)
+	$(CXX) $(CXXFLAGS) -o sender.exe sender.cpp $(SRC)communicator.cpp $(SRC)huffman.cpp && ./sender.exe $(IP).$(LAST_OCTET)
 
 r: receiver.cpp $(SRC)communicator.cpp $(HEADER)communicator.hpp $(SRC)huffman.cpp $(HEADER)huffman.hpp
 	$(CXX) $(CXXFLAGS) -o receiver.exe receiver.cpp $(SRC)communicator.cpp $(SRC)huffman.cpp && ./receiver.exe
