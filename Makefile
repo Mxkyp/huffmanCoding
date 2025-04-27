@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Wpedantic
-CXXDEVFLAGS = -Wall -Wextra -Wpedantic -g -fsanitize=address
+CXXFLAGS = -Wall -std=c++20 -Wextra -Wpedantic
+CXXDEVFLAGS = -Wall -std=c++20 -Wextra -Wpedantic -g -fsanitize=address
 LDFLAGS = -fsanitize=address
 
 all: sender receiver
